@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Python 캐시 & 빌드
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+dist/
+build/

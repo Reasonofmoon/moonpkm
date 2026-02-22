@@ -1,0 +1,12 @@
+name: context-builder
+description: 검색어 기반 Context Pack 자동 생성 — AI 글쓰기 재료 준비
+triggers:
+  - command: "moon agent run context-builder -i '{{topic}}'"
+steps:
+  - action: semantic_search
+    query: "{{input}}"
+    top_k: 10
+  - action: build_context_pack
+    purpose: "{{input}}"
+  - action: report
+    output: terminal

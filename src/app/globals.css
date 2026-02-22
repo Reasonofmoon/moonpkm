@@ -1,26 +1,86 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-background: #282c34;
+  --color-surface: #21252b;
+  --color-border: #3a3f4b;
+  --color-text: #abb2bf;
+  --color-text-bright: #e6e6e6;
+  --color-text-dim: #5c6370;
+  --color-accent: #7c9ef8;
+  --color-green: #98c379;
+  --color-red: #e06c75;
+  --color-orange: #d19a66;
+  --color-yellow: #e5c07b;
+  --color-purple: #c678dd;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 스크롤바 스타일링 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #21252b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3a3f4b;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4b5263;
+}
+
+/* Vim 커서 스타일 */
+.cm-cursor {
+  border-left: 2px solid #7c9ef8 !important;
+}
+
+/* CodeMirror 다크 배경 통일 */
+.cm-editor {
+  background-color: #282c34 !important;
+}
+
+/* wikilink 스타일 */
+.cm-url {
+  color: #7c9ef8;
+}
+
+/* ReactFlow 다크 */
+.react-flow__background {
+  background: #282c34;
+}
+
+/* Vim 커맨드 라인 */
+.cm-vim-panel {
+  background: #21252b !important;
+  border-top: 1px solid #3a3f4b !important;
+  color: #e6e6e6 !important;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 13px;
+  padding: 2px 8px;
+}
+
+/* 선택 강조 */
+.cm-selectionBackground {
+  background: rgba(124, 158, 248, 0.2) !important;
+}
+
+/* 활성 라인 */
+.cm-activeLine {
+  background: rgba(255, 255, 255, 0.03) !important;
 }

@@ -1,0 +1,8 @@
+name: inbox-processor
+description: Inbox 노트를 DIKM 레벨에 따라 적합한 PARA 폴더로 자동 분류
+steps:
+  - action: read_inbox
+  - action: classify_dikm
+  - action: suggest_brain
+  - action: report
+    output: terminal

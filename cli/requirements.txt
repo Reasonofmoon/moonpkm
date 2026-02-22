@@ -1,0 +1,5 @@
+click>=8.1
+rich>=13.0
+pyyaml>=6.0
+python-frontmatter>=1.1
+google-generativeai>=0.8

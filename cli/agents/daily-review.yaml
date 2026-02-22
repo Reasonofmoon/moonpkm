@@ -1,0 +1,13 @@
+name: daily-review
+description: 매일 아침 Inbox 처리 + SRS 리뷰 + 진행상황 리포트
+triggers:
+  - schedule: "09:00"
+steps:
+  - action: read_inbox
+  - action: classify_dikm
+  - action: suggest_brain
+    for: unprocessed_captures
+  - action: srs_review
+    due_today: true
+  - action: report
+    output: terminal
