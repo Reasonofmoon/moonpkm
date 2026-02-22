@@ -3,7 +3,8 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import Sidebar from '@/components/Sidebar'
-import { Search, X, GitGraph, FileCode, RefreshCw, GraduationCap } from 'lucide-react'
+import { Search, X, GitGraph, FileCode, RefreshCw, GraduationCap, Keyboard } from 'lucide-react'
+import { KeyboardShortcuts, Tooltip } from '@/components/KeyboardShortcuts'
 
 const VimEditor = dynamic(() => import('@/components/VimEditor'), { ssr: false })
 const GraphView = dynamic(() => import('@/components/GraphView'), { ssr: false })
@@ -19,6 +20,7 @@ export default function Home() {
   const [isDirty, setIsDirty] = useState(false)
   const [saving, setSaving] = useState(false)
   const [showVimTutor, setShowVimTutor] = useState(false)
+  const [showShortcuts, setShowShortcuts] = useState(false)
 
   // 검색 모달
   const [showSearch, setShowSearch] = useState(false)
@@ -131,8 +133,17 @@ export default function Home() {
         e.preventDefault()
         setShowSearch(true)
       }
+      // ? 키: 단축키 패널 (편집 모드가 아닐 때)
+      if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
+        const tag = (e.target as HTMLElement).tagName
+        if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+          e.preventDefault()
+          setShowShortcuts(prev => !prev)
+        }
+      }
       if (e.key === 'Escape') {
         setShowSearch(false)
+        setShowShortcuts(false)
         setSearchQuery('')
       }
     }
@@ -196,36 +207,51 @@ export default function Home() {
           )}
 
           <div className="ml-auto flex items-center gap-1">
-            <button
-              onClick={() => setActiveTab('editor')}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs transition-colors ${
-                activeTab === 'editor'
-                  ? 'bg-[#2d4a7a] text-[#7c9ef8]'
-                  : 'text-[#5c6370] hover:text-[#abb2bf]'
-              }`}
-            >
-              <FileCode size={13} />
-              편집기
-            </button>
-            <button
-              onClick={() => setActiveTab('graph')}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs transition-colors ${
-                activeTab === 'graph'
-                  ? 'bg-[#2d4a7a] text-[#7c9ef8]'
-                  : 'text-[#5c6370] hover:text-[#abb2bf]'
-              }`}
-            >
-              <GitGraph size={13} />
-              그래프
-            </button>
+            <Tooltip content="편집기" shortcut={['e']} side="bottom">
+              <button
+                onClick={() => setActiveTab('editor')}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs transition-colors ${
+                  activeTab === 'editor'
+                    ? 'bg-[#2d4a7a] text-[#7c9ef8]'
+                    : 'text-[#5c6370] hover:text-[#abb2bf]'
+                }`}
+              >
+                <FileCode size={13} />
+                편집기
+              </button>
+            </Tooltip>
+            <Tooltip content="지식 그래프" shortcut={[':Graph']} side="bottom">
+              <button
+                onClick={() => setActiveTab('graph')}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs transition-colors ${
+                  activeTab === 'graph'
+                    ? 'bg-[#2d4a7a] text-[#7c9ef8]'
+                    : 'text-[#5c6370] hover:text-[#abb2bf]'
+                }`}
+              >
+                <GitGraph size={13} />
+                그래프
+              </button>
+            </Tooltip>
 
-            <button
-              onClick={() => setShowVimTutor(true)}
-              className="flex items-center gap-1.5 px-3 py-1 rounded text-xs transition-colors text-[#5c6370] hover:text-[#abb2bf]"
-              title="Vim 학습 (데일리 미션)"
-            >
-              <GraduationCap size={13} />
-            </button>
+            <Tooltip content="Vim 데일리 미션" shortcut={['VimTutor']} side="bottom">
+              <button
+                onClick={() => setShowVimTutor(true)}
+                className="flex items-center gap-1.5 px-3 py-1 rounded text-xs transition-colors text-[#5c6370] hover:text-[#abb2bf]"
+              >
+                <GraduationCap size={13} />
+                VimTutor
+              </button>
+            </Tooltip>
+
+            <Tooltip content="단축키 전체 보기" shortcut={['?']} side="bottom">
+              <button
+                onClick={() => setShowShortcuts(true)}
+                className="flex items-center gap-1.5 px-3 py-1 rounded text-xs transition-colors text-[#5c6370] hover:text-[#abb2bf]"
+              >
+                <Keyboard size={13} />
+              </button>
+            </Tooltip>
             {saving && (
               <div className="flex items-center gap-1 text-[10px] text-[#5c6370]">
                 <RefreshCw size={10} className="animate-spin" />
@@ -285,6 +311,9 @@ export default function Home() {
       {showVimTutor && (
         <VimTutor isOpen={showVimTutor} onClose={() => setShowVimTutor(false)} />
       )}
+
+      {/* 단축키 패널 */}
+      <KeyboardShortcuts isOpen={showShortcuts} onClose={() => setShowShortcuts(false)} />
 
       {/* 검색 모달 (Telescope 스타일) */}
       {showSearch && (
