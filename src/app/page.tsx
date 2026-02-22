@@ -9,6 +9,7 @@ import { KeyboardShortcuts, Tooltip } from '@/components/KeyboardShortcuts'
 const VimEditor = dynamic(() => import('@/components/VimEditor'), { ssr: false })
 const GraphView = dynamic(() => import('@/components/GraphView'), { ssr: false })
 const VimTutor = dynamic(() => import('@/components/VimTutor'), { ssr: false })
+const KeyDrill = dynamic(() => import('@/components/KeyDrill'), { ssr: false })
 
 type Tab = 'editor' | 'graph'
 
@@ -21,6 +22,7 @@ export default function Home() {
   const [saving, setSaving] = useState(false)
   const [showVimTutor, setShowVimTutor] = useState(false)
   const [showShortcuts, setShowShortcuts] = useState(false)
+  const [showKeyDrill, setShowKeyDrill] = useState(false)
 
   // 검색 모달
   const [showSearch, setShowSearch] = useState(false)
@@ -141,6 +143,10 @@ export default function Home() {
           setShowShortcuts(prev => !prev)
         }
       }
+      // Space 키: 카드 뒤집기 (KeyDrill 활성 시 page 레벨에서 막음)
+      if (e.key === ' ' && !e.ctrlKey && !e.metaKey) {
+        // KeyDrill 내부에서 처리하므로 여기서는 별도 처리 없음
+      }
       if (e.key === 'Escape') {
         setShowSearch(false)
         setShowShortcuts(false)
@@ -244,6 +250,15 @@ export default function Home() {
               </button>
             </Tooltip>
 
+            <Tooltip content="단축키 드릴" shortcut={['Drill']} side="bottom">
+              <button
+                onClick={() => setShowKeyDrill(true)}
+                className="flex items-center gap-1.5 px-3 py-1 rounded text-xs transition-colors text-[#5c6370] hover:text-[#abb2bf]"
+              >
+                🃏 드릴
+              </button>
+            </Tooltip>
+
             <Tooltip content="단축키 전체 보기" shortcut={['?']} side="bottom">
               <button
                 onClick={() => setShowShortcuts(true)}
@@ -310,6 +325,11 @@ export default function Home() {
       {/* VimTutor 모달 */}
       {showVimTutor && (
         <VimTutor isOpen={showVimTutor} onClose={() => setShowVimTutor(false)} />
+      )}
+
+      {/* 단축키 드릴 */}
+      {showKeyDrill && (
+        <KeyDrill isOpen={showKeyDrill} onClose={() => setShowKeyDrill(false)} />
       )}
 
       {/* 단축키 패널 */}
