@@ -3,11 +3,11 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import Sidebar from '@/components/Sidebar'
-import { Search, X, GitGraph, FileCode, LayoutGrid, RefreshCw } from 'lucide-react'
+import { Search, X, GitGraph, FileCode, RefreshCw, GraduationCap } from 'lucide-react'
 
-// SSR 비활성화 (CodeMirror, ReactFlow는 클라이언트 전용)
 const VimEditor = dynamic(() => import('@/components/VimEditor'), { ssr: false })
 const GraphView = dynamic(() => import('@/components/GraphView'), { ssr: false })
+const VimTutor = dynamic(() => import('@/components/VimTutor'), { ssr: false })
 
 type Tab = 'editor' | 'graph'
 
@@ -18,6 +18,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>('editor')
   const [isDirty, setIsDirty] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [showVimTutor, setShowVimTutor] = useState(false)
 
   // 검색 모달
   const [showSearch, setShowSearch] = useState(false)
@@ -218,7 +219,13 @@ export default function Home() {
               그래프
             </button>
 
-            {/* 저장 상태 */}
+            <button
+              onClick={() => setShowVimTutor(true)}
+              className="flex items-center gap-1.5 px-3 py-1 rounded text-xs transition-colors text-[#5c6370] hover:text-[#abb2bf]"
+              title="Vim 학습 (데일리 미션)"
+            >
+              <GraduationCap size={13} />
+            </button>
             {saving && (
               <div className="flex items-center gap-1 text-[10px] text-[#5c6370]">
                 <RefreshCw size={10} className="animate-spin" />
@@ -273,6 +280,11 @@ export default function Home() {
           )}
         </div>
       </div>
+
+      {/* VimTutor 모달 */}
+      {showVimTutor && (
+        <VimTutor isOpen={showVimTutor} onClose={() => setShowVimTutor(false)} />
+      )}
 
       {/* 검색 모달 (Telescope 스타일) */}
       {showSearch && (
