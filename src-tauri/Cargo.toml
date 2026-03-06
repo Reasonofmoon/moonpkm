@@ -1,0 +1,32 @@
+[package]
+name = "moonpkm"
+version = "1.0.0"
+description = "MoonPKM — Vim-based Knowledge Manager"
+authors = ["Reason Moon"]
+license = "MIT"
+repository = "https://github.com/Reasonofmoon/moonpkm"
+edition = "2021"
+rust-version = "1.77.2"
+
+[lib]
+name = "moonpkm_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2" }
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-shell = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+walkdir = "2"
+reqwest = { version = "0.12", features = ["json", "blocking", "rustls-tls"], default-features = false }
+tokio = { version = "1", features = ["full"] }
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
+
